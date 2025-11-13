@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timing Volunteer Interest Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; background: #ffffff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 50px 40px; text-align: center; position: relative; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; font-weight: 700; }
+        .header p { font-size: 1.2em; opacity: 0.95; }
+        .form-content { padding: 50px 40px; }
+        .section { margin-bottom: 50px; }
+        .section-title { font-size: 1.8em; color: #667eea; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 3px solid #667eea; font-weight: 700; }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; font-weight: 600; color: #2d3748; margin-bottom: 10px; font-size: 1.05em; }
+        input[type="text"], input[type="email"], input[type="tel"], textarea { width: 100%; padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1em; transition: all 0.3s ease; font-family: inherit; }
+        input:focus, textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .required { color: #f56565; }
+        .weekend-header { color: #2d3748; font-size: 1.5em; font-weight: 700; margin: 40px 0 25px 0; padding: 12px 20px; background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%); border-radius: 12px; border-left: 5px solid #667eea; }
+        .event-card { background: #f7fafc; border: 2px solid #e2e8f0; border-radius: 16px; padding: 25px; margin-bottom: 20px; transition: all 0.3s ease; }
+        .event-card:hover { border-color: #667eea; box-shadow: 0 8px 24px rgba(102, 126, 234, 0.12); transform: translateY(-2px); }
+        .event-header { margin-bottom: 18px; }
+        .event-date { font-size: 0.9em; color: #718096; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .event-name { font-size: 1.15em; font-weight: 700; color: #2d3748; margin-top: 6px; line-height: 1.4; }
+        .event-category { display: inline-block; padding: 6px 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 20px; font-size: 0.85em; font-weight: 600; margin-top: 10px; letter-spacing: 0.3px; }
+        .checkbox-group { margin: 18px 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+        .checkbox-item { display: flex; align-items: center; }
+        .checkbox-item input[type="checkbox"] { width: 22px; height: 22px; margin-right: 12px; cursor: pointer; accent-color: #667eea; }
+        .checkbox-item label { margin-bottom: 0; cursor: pointer; font-weight: 500; color: #4a5568; }
+        textarea { min-height: 90px; resize: vertical; }
+        .submit-section { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 2px solid #e2e8f0; }
+        button[type="submit"] { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 18px 60px; border: none; border-radius: 50px; font-size: 1.2em; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3); }
+        button[type="submit"]:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(102, 126, 234, 0.4); }
+        button[type="submit"]:disabled { background: #cbd5e0; cursor: not-allowed; transform: none; box-shadow: none; }
+        .loading { display: none; text-align: center; padding: 30px; }
+        .loading.active { display: block; }
+        .success-message, .error-message { display: none; padding: 25px; border-radius: 16px; margin: 20px 0; text-align: center; font-weight: 600; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); }
+        .success-message { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; }
+        .error-message { background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%); color: white; }
+        .success-message.active, .error-message.active { display: block; }
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .header { padding: 35px 25px; }
+            .header h1 { font-size: 1.8em; }
+            .form-content { padding: 35px 25px; }
+            .event-card { padding: 20px; }
+            .checkbox-group { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⛷️ Timing Volunteer Interest Form</h1>
+            <p>2025-2026 Ski Racing Season • Organized by Weekend</p>
+        </div>
+        <div class="form-content">
+            <div class="success-message" id="successMessage">✅ Thank you! Your responses have been submitted successfully.</div>
+            <div class="error-message" id="errorMessage">❌ There was an error submitting your form. Please try again.</div>
+            <form id="volunteerForm">
+                <div class="section">
+                    <h2 class="section-title">Contact Information</h2>
+                    <div class="form-group"><label for="firstName">First Name <span class="required">*</span></label><input type="text" id="firstName" name="firstName" required></div>
+                    <div class="form-group"><label for="lastName">Last Name <span class="required">*</span></label><input type="text" id="lastName" name="lastName" required></div>
+                    <div class="form-group"><label for="email">Email <span class="required">*</span></label><input type="email" id="email" name="email" required></div>
+                    <div class="form-group"><label for="phone">Phone Number <span class="required">*</span></label><input type="tel" id="phone" name="phone" required></div>
+                </div>
+                <div class="section">
+                    <h2 class="section-title">Event Timing Opportunities</h2>
+                    <p style="margin-bottom: 35px; color: #718096; font-size: 1.05em;">Events are organized by weekend and category for easy review.</p>
+                    <h3 class="weekend-header">🎿 Giants Ridge (12/13-14)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/13/2025</div>
+                            <div class="event-name">Giants Ridge x1 FIS SL AM</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e1_cot" name="e1_roles" value="COT"><label for="e1_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e1_mentor" name="e1_roles" value="Mentor"><label for="e1_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e1_timing" name="e1_roles" value="Run Timing Computer"><label for="e1_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e1_shadow" name="e1_roles" value="Shadow"><label for="e1_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e1_notes">Notes</label><textarea id="e1_notes" name="e1_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/14/2025</div>
+                            <div class="event-name">Giants Ridge x1 FIS SL AM</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e2_cot" name="e2_roles" value="COT"><label for="e2_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e2_mentor" name="e2_roles" value="Mentor"><label for="e2_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e2_timing" name="e2_roles" value="Run Timing Computer"><label for="e2_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e2_shadow" name="e2_roles" value="Shadow"><label for="e2_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e2_notes">Notes</label><textarea id="e2_notes" name="e2_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/13/2025</div>
+                            <div class="event-name">Giants Ridge x1 Scored SL PM</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e3_cot" name="e3_roles" value="COT"><label for="e3_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e3_mentor" name="e3_roles" value="Mentor"><label for="e3_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e3_timing" name="e3_roles" value="Run Timing Computer"><label for="e3_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e3_shadow" name="e3_roles" value="Shadow"><label for="e3_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e3_notes">Notes</label><textarea id="e3_notes" name="e3_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/14/2025</div>
+                            <div class="event-name">Giants Ridge x1 Scored GS PM</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e4_cot" name="e4_roles" value="COT"><label for="e4_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e4_mentor" name="e4_roles" value="Mentor"><label for="e4_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e4_timing" name="e4_roles" value="Run Timing Computer"><label for="e4_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e4_shadow" name="e4_roles" value="Shadow"><label for="e4_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e4_notes">Notes</label><textarea id="e4_notes" name="e4_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 Searchmont, Wild & Buck (12/19-23)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/19/2025</div>
+                            <div class="event-name">Searchmont</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e5_cot" name="e5_roles" value="COT"><label for="e5_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e5_mentor" name="e5_roles" value="Mentor"><label for="e5_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e5_timing" name="e5_roles" value="Run Timing Computer"><label for="e5_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e5_shadow" name="e5_roles" value="Shadow"><label for="e5_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e5_notes">Notes</label><textarea id="e5_notes" name="e5_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/20/2025</div>
+                            <div class="event-name">Searchmont</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e6_cot" name="e6_roles" value="COT"><label for="e6_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e6_mentor" name="e6_roles" value="Mentor"><label for="e6_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e6_timing" name="e6_roles" value="Run Timing Computer"><label for="e6_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e6_shadow" name="e6_roles" value="Shadow"><label for="e6_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e6_notes">Notes</label><textarea id="e6_notes" name="e6_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/21/2025</div>
+                            <div class="event-name">Searchmont</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e7_cot" name="e7_roles" value="COT"><label for="e7_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e7_mentor" name="e7_roles" value="Mentor"><label for="e7_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e7_timing" name="e7_roles" value="Run Timing Computer"><label for="e7_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e7_shadow" name="e7_roles" value="Shadow"><label for="e7_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e7_notes">Notes</label><textarea id="e7_notes" name="e7_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/22/2025</div>
+                            <div class="event-name">Searchmont</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e8_cot" name="e8_roles" value="COT"><label for="e8_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e8_mentor" name="e8_roles" value="Mentor"><label for="e8_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e8_timing" name="e8_roles" value="Run Timing Computer"><label for="e8_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e8_shadow" name="e8_roles" value="Shadow"><label for="e8_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e8_notes">Notes</label><textarea id="e8_notes" name="e8_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/20/2025</div>
+                            <div class="event-name">Wild U14 SQ AM/Training PM, U10/U12 scrimmage</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e9_cot" name="e9_roles" value="COT"><label for="e9_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e9_mentor" name="e9_roles" value="Mentor"><label for="e9_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e9_timing" name="e9_roles" value="Run Timing Computer"><label for="e9_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e9_shadow" name="e9_roles" value="Shadow"><label for="e9_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e9_notes">Notes</label><textarea id="e9_notes" name="e9_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/21/2025</div>
+                            <div class="event-name">Wild U14 2x GS 2x SL</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e10_cot" name="e10_roles" value="COT"><label for="e10_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e10_mentor" name="e10_roles" value="Mentor"><label for="e10_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e10_timing" name="e10_roles" value="Run Timing Computer"><label for="e10_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e10_shadow" name="e10_roles" value="Shadow"><label for="e10_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e10_notes">Notes</label><textarea id="e10_notes" name="e10_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/20/2025</div>
+                            <div class="event-name">Wild x2 Scored SL M & W</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e11_cot" name="e11_roles" value="COT"><label for="e11_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e11_mentor" name="e11_roles" value="Mentor"><label for="e11_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e11_timing" name="e11_roles" value="Run Timing Computer"><label for="e11_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e11_shadow" name="e11_roles" value="Shadow"><label for="e11_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e11_notes">Notes</label><textarea id="e11_notes" name="e11_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/21/2025</div>
+                            <div class="event-name">Wild x2 Scored GS M & W</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e12_cot" name="e12_roles" value="COT"><label for="e12_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e12_mentor" name="e12_roles" value="Mentor"><label for="e12_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e12_timing" name="e12_roles" value="Run Timing Computer"><label for="e12_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e12_shadow" name="e12_roles" value="Shadow"><label for="e12_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e12_notes">Notes</label><textarea id="e12_notes" name="e12_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">12/23/2025</div>
+                            <div class="event-name">Chuck Stone U14 Ski Up - Buck x1 SL M & W</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e13_cot" name="e13_roles" value="COT"><label for="e13_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e13_mentor" name="e13_roles" value="Mentor"><label for="e13_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e13_timing" name="e13_roles" value="Run Timing Computer"><label for="e13_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e13_shadow" name="e13_roles" value="Shadow"><label for="e13_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e13_notes">Notes</label><textarea id="e13_notes" name="e13_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 Spirit & Buck (1/3-4)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/3/2026</div>
+                            <div class="event-name">Buck 3 Run SL ENL</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e14_cot" name="e14_roles" value="COT"><label for="e14_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e14_mentor" name="e14_roles" value="Mentor"><label for="e14_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e14_timing" name="e14_roles" value="Run Timing Computer"><label for="e14_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e14_shadow" name="e14_roles" value="Shadow"><label for="e14_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e14_notes">Notes</label><textarea id="e14_notes" name="e14_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/4/2026</div>
+                            <div class="event-name">Buck 3 Run SL ENL</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e15_cot" name="e15_roles" value="COT"><label for="e15_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e15_mentor" name="e15_roles" value="Mentor"><label for="e15_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e15_timing" name="e15_roles" value="Run Timing Computer"><label for="e15_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e15_shadow" name="e15_roles" value="Shadow"><label for="e15_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e15_notes">Notes</label><textarea id="e15_notes" name="e15_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/3/2026</div>
+                            <div class="event-name">Spirit 3 Run SL M & W (PC)</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e16_cot" name="e16_roles" value="COT"><label for="e16_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e16_mentor" name="e16_roles" value="Mentor"><label for="e16_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e16_timing" name="e16_roles" value="Run Timing Computer"><label for="e16_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e16_shadow" name="e16_roles" value="Shadow"><label for="e16_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e16_notes">Notes</label><textarea id="e16_notes" name="e16_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/4/2026</div>
+                            <div class="event-name">Spirit 3 Run GS M & W (PC)</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e17_cot" name="e17_roles" value="COT"><label for="e17_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e17_mentor" name="e17_roles" value="Mentor"><label for="e17_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e17_timing" name="e17_roles" value="Run Timing Computer"><label for="e17_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e17_shadow" name="e17_roles" value="Shadow"><label for="e17_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e17_notes">Notes</label><textarea id="e17_notes" name="e17_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/3/2026</div>
+                            <div class="event-name">Spirit U14 Ski Up - GS M & W (PC)</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e18_cot" name="e18_roles" value="COT"><label for="e18_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e18_mentor" name="e18_roles" value="Mentor"><label for="e18_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e18_timing" name="e18_roles" value="Run Timing Computer"><label for="e18_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e18_shadow" name="e18_roles" value="Shadow"><label for="e18_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e18_notes">Notes</label><textarea id="e18_notes" name="e18_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/4/2026</div>
+                            <div class="event-name">Spirit U14 Ski Up - SL M & W (PC)</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e19_cot" name="e19_roles" value="COT"><label for="e19_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e19_mentor" name="e19_roles" value="Mentor"><label for="e19_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e19_timing" name="e19_roles" value="Run Timing Computer"><label for="e19_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e19_shadow" name="e19_roles" value="Shadow"><label for="e19_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e19_notes">Notes</label><textarea id="e19_notes" name="e19_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 Donut Cup (1/19)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/19/2026</div>
+                            <div class="event-name">Donut Cup U12 & Under</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e20_cot" name="e20_roles" value="COT"><label for="e20_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e20_mentor" name="e20_roles" value="Mentor"><label for="e20_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e20_timing" name="e20_roles" value="Run Timing Computer"><label for="e20_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e20_shadow" name="e20_roles" value="Shadow"><label for="e20_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e20_notes">Notes</label><textarea id="e20_notes" name="e20_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 La Crosse & Nagy (1/24-25)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/24/2026</div>
+                            <div class="event-name">Nagy LAX M & W - SL</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e21_cot" name="e21_roles" value="COT"><label for="e21_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e21_mentor" name="e21_roles" value="Mentor"><label for="e21_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e21_timing" name="e21_roles" value="Run Timing Computer"><label for="e21_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e21_shadow" name="e21_roles" value="Shadow"><label for="e21_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e21_notes">Notes</label><textarea id="e21_notes" name="e21_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/25/2026</div>
+                            <div class="event-name">Nagy LAX M & W - SL</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e22_cot" name="e22_roles" value="COT"><label for="e22_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e22_mentor" name="e22_roles" value="Mentor"><label for="e22_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e22_timing" name="e22_roles" value="Run Timing Computer"><label for="e22_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e22_shadow" name="e22_roles" value="Shadow"><label for="e22_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e22_notes">Notes</label><textarea id="e22_notes" name="e22_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/24/2026</div>
+                            <div class="event-name">La Crosse 2x SL - U8-U14 (PC)</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e23_cot" name="e23_roles" value="COT"><label for="e23_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e23_mentor" name="e23_roles" value="Mentor"><label for="e23_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e23_timing" name="e23_roles" value="Run Timing Computer"><label for="e23_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e23_shadow" name="e23_roles" value="Shadow"><label for="e23_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e23_notes">Notes</label><textarea id="e23_notes" name="e23_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/25/2026</div>
+                            <div class="event-name">La Crosse 2x GS - U8-U12 (PC)</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e24_cot" name="e24_roles" value="COT"><label for="e24_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e24_mentor" name="e24_roles" value="Mentor"><label for="e24_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e24_timing" name="e24_roles" value="Run Timing Computer"><label for="e24_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e24_shadow" name="e24_roles" value="Shadow"><label for="e24_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e24_notes">Notes</label><textarea id="e24_notes" name="e24_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/24/2026</div>
+                            <div class="event-name">Nagy LAX M & W - SL</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e25_cot" name="e25_roles" value="COT"><label for="e25_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e25_mentor" name="e25_roles" value="Mentor"><label for="e25_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e25_timing" name="e25_roles" value="Run Timing Computer"><label for="e25_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e25_shadow" name="e25_roles" value="Shadow"><label for="e25_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e25_notes">Notes</label><textarea id="e25_notes" name="e25_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/25/2026</div>
+                            <div class="event-name">Nagy LAX M & W - SL U14 Ski Up (PC)(Limit FIS athletes)</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e26_cot" name="e26_roles" value="COT"><label for="e26_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e26_mentor" name="e26_roles" value="Mentor"><label for="e26_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e26_timing" name="e26_roles" value="Run Timing Computer"><label for="e26_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e26_shadow" name="e26_roles" value="Shadow"><label for="e26_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e26_notes">Notes</label><textarea id="e26_notes" name="e26_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 SL Qualifier & Giants (1/30 - 2/1)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/30/2026</div>
+                            <div class="event-name">SL Qualifier - Atmore SL</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e27_cot" name="e27_roles" value="COT"><label for="e27_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e27_mentor" name="e27_roles" value="Mentor"><label for="e27_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e27_timing" name="e27_roles" value="Run Timing Computer"><label for="e27_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e27_shadow" name="e27_roles" value="Shadow"><label for="e27_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e27_notes">Notes</label><textarea id="e27_notes" name="e27_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/31/2026</div>
+                            <div class="event-name">SL Qualifier - Atmore SL</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e28_cot" name="e28_roles" value="COT"><label for="e28_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e28_mentor" name="e28_roles" value="Mentor"><label for="e28_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e28_timing" name="e28_roles" value="Run Timing Computer"><label for="e28_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e28_shadow" name="e28_roles" value="Shadow"><label for="e28_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e28_notes">Notes</label><textarea id="e28_notes" name="e28_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/1/2026</div>
+                            <div class="event-name">SL Qualifier - Atmore SL</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e29_cot" name="e29_roles" value="COT"><label for="e29_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e29_mentor" name="e29_roles" value="Mentor"><label for="e29_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e29_timing" name="e29_roles" value="Run Timing Computer"><label for="e29_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e29_shadow" name="e29_roles" value="Shadow"><label for="e29_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e29_notes">Notes</label><textarea id="e29_notes" name="e29_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/31/2026</div>
+                            <div class="event-name">Giants 3x SL M & W (PC)</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e30_cot" name="e30_roles" value="COT"><label for="e30_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e30_mentor" name="e30_roles" value="Mentor"><label for="e30_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e30_timing" name="e30_roles" value="Run Timing Computer"><label for="e30_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e30_shadow" name="e30_roles" value="Shadow"><label for="e30_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e30_notes">Notes</label><textarea id="e30_notes" name="e30_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/1/2026</div>
+                            <div class="event-name">Giants 3x GS M & W (PC)</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e31_cot" name="e31_roles" value="COT"><label for="e31_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e31_mentor" name="e31_roles" value="Mentor"><label for="e31_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e31_timing" name="e31_roles" value="Run Timing Computer"><label for="e31_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e31_shadow" name="e31_roles" value="Shadow"><label for="e31_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e31_notes">Notes</label><textarea id="e31_notes" name="e31_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">1/31/2026</div>
+                            <div class="event-name">Giants 2x SL U14 Ski Up (PC)</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e32_cot" name="e32_roles" value="COT"><label for="e32_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e32_mentor" name="e32_roles" value="Mentor"><label for="e32_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e32_timing" name="e32_roles" value="Run Timing Computer"><label for="e32_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e32_shadow" name="e32_roles" value="Shadow"><label for="e32_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e32_notes">Notes</label><textarea id="e32_notes" name="e32_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/1/2026</div>
+                            <div class="event-name">Giants 2x GS U14 Ski Up (PC)</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e33_cot" name="e33_roles" value="COT"><label for="e33_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e33_mentor" name="e33_roles" value="Mentor"><label for="e33_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e33_timing" name="e33_roles" value="Run Timing Computer"><label for="e33_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e33_shadow" name="e33_roles" value="Shadow"><label for="e33_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e33_notes">Notes</label><textarea id="e33_notes" name="e33_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 Lutsen (2/2)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/2/2026</div>
+                            <div class="event-name">Lutsen 2x GS</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e34_cot" name="e34_roles" value="COT"><label for="e34_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e34_mentor" name="e34_roles" value="Mentor"><label for="e34_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e34_timing" name="e34_roles" value="Run Timing Computer"><label for="e34_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e34_shadow" name="e34_roles" value="Shadow"><label for="e34_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e34_notes">Notes</label><textarea id="e34_notes" name="e34_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 Afton Night (2/13)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/13/2026</div>
+                            <div class="event-name">Afton Night U14 Ski Up GS - M & W (PC)</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e35_cot" name="e35_roles" value="COT"><label for="e35_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e35_mentor" name="e35_roles" value="Mentor"><label for="e35_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e35_timing" name="e35_roles" value="Run Timing Computer"><label for="e35_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e35_shadow" name="e35_roles" value="Shadow"><label for="e35_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e35_notes">Notes</label><textarea id="e35_notes" name="e35_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 Paul Augustine (2/16)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/16/2026</div>
+                            <div class="event-name">Paul Augustine U8-U14</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e36_cot" name="e36_roles" value="COT"><label for="e36_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e36_mentor" name="e36_roles" value="Mentor"><label for="e36_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e36_timing" name="e36_roles" value="Run Timing Computer"><label for="e36_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e36_shadow" name="e36_roles" value="Shadow"><label for="e36_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e36_notes">Notes</label><textarea id="e36_notes" name="e36_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 Hosking Snowriver (2/19-22)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/20/2026</div>
+                            <div class="event-name">Hosking - Snowriver U14</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e37_cot" name="e37_roles" value="COT"><label for="e37_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e37_mentor" name="e37_roles" value="Mentor"><label for="e37_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e37_timing" name="e37_roles" value="Run Timing Computer"><label for="e37_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e37_shadow" name="e37_roles" value="Shadow"><label for="e37_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e37_notes">Notes</label><textarea id="e37_notes" name="e37_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/21/2026</div>
+                            <div class="event-name">Hosking - Snowriver U14</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e38_cot" name="e38_roles" value="COT"><label for="e38_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e38_mentor" name="e38_roles" value="Mentor"><label for="e38_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e38_timing" name="e38_roles" value="Run Timing Computer"><label for="e38_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e38_shadow" name="e38_roles" value="Shadow"><label for="e38_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e38_notes">Notes</label><textarea id="e38_notes" name="e38_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/22/2026</div>
+                            <div class="event-name">Hosking - Snowriver U14</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e39_cot" name="e39_roles" value="COT"><label for="e39_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e39_mentor" name="e39_roles" value="Mentor"><label for="e39_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e39_timing" name="e39_roles" value="Run Timing Computer"><label for="e39_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e39_shadow" name="e39_roles" value="Shadow"><label for="e39_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e39_notes">Notes</label><textarea id="e39_notes" name="e39_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/19/2026</div>
+                            <div class="event-name">Hosking - Snowriver</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e40_cot" name="e40_roles" value="COT"><label for="e40_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e40_mentor" name="e40_roles" value="Mentor"><label for="e40_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e40_timing" name="e40_roles" value="Run Timing Computer"><label for="e40_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e40_shadow" name="e40_roles" value="Shadow"><label for="e40_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e40_notes">Notes</label><textarea id="e40_notes" name="e40_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/20/2026</div>
+                            <div class="event-name">Hosking - Snowriver</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e41_cot" name="e41_roles" value="COT"><label for="e41_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e41_mentor" name="e41_roles" value="Mentor"><label for="e41_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e41_timing" name="e41_roles" value="Run Timing Computer"><label for="e41_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e41_shadow" name="e41_roles" value="Shadow"><label for="e41_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e41_notes">Notes</label><textarea id="e41_notes" name="e41_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/21/2026</div>
+                            <div class="event-name">Hosking - Snowriver</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e42_cot" name="e42_roles" value="COT"><label for="e42_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e42_mentor" name="e42_roles" value="Mentor"><label for="e42_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e42_timing" name="e42_roles" value="Run Timing Computer"><label for="e42_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e42_shadow" name="e42_roles" value="Shadow"><label for="e42_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e42_notes">Notes</label><textarea id="e42_notes" name="e42_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 Mid-AM & Afton Finale (2/27 - 3/1)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/27/2026</div>
+                            <div class="event-name">Mid-AM Snowriver</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e43_cot" name="e43_roles" value="COT"><label for="e43_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e43_mentor" name="e43_roles" value="Mentor"><label for="e43_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e43_timing" name="e43_roles" value="Run Timing Computer"><label for="e43_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e43_shadow" name="e43_roles" value="Shadow"><label for="e43_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e43_notes">Notes</label><textarea id="e43_notes" name="e43_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/28/2026</div>
+                            <div class="event-name">Mid-AM Snowriver</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e44_cot" name="e44_roles" value="COT"><label for="e44_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e44_mentor" name="e44_roles" value="Mentor"><label for="e44_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e44_timing" name="e44_roles" value="Run Timing Computer"><label for="e44_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e44_shadow" name="e44_roles" value="Shadow"><label for="e44_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e44_notes">Notes</label><textarea id="e44_notes" name="e44_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/1/2026</div>
+                            <div class="event-name">Mid-AM Snowriver</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e45_cot" name="e45_roles" value="COT"><label for="e45_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e45_mentor" name="e45_roles" value="Mentor"><label for="e45_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e45_timing" name="e45_roles" value="Run Timing Computer"><label for="e45_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e45_shadow" name="e45_roles" value="Shadow"><label for="e45_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e45_notes">Notes</label><textarea id="e45_notes" name="e45_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">2/28/2026</div>
+                            <div class="event-name">Afton Planet Cup Finale - U8-12 2GS/2SL (PC)</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e46_cot" name="e46_roles" value="COT"><label for="e46_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e46_mentor" name="e46_roles" value="Mentor"><label for="e46_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e46_timing" name="e46_roles" value="Run Timing Computer"><label for="e46_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e46_shadow" name="e46_roles" value="Shadow"><label for="e46_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e46_notes">Notes</label><textarea id="e46_notes" name="e46_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/1/2026</div>
+                            <div class="event-name">Afton Planet Cup Finale - U14 2GS/2SL (PC)</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e47_cot" name="e47_roles" value="COT"><label for="e47_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e47_mentor" name="e47_roles" value="Mentor"><label for="e47_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e47_timing" name="e47_roles" value="Run Timing Computer"><label for="e47_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e47_shadow" name="e47_roles" value="Shadow"><label for="e47_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e47_notes">Notes</label><textarea id="e47_notes" name="e47_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 Giants (3/7)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/7/2026</div>
+                            <div class="event-name">Giants x2 GS/x2 SL U8-U14</div>
+                            <span class="event-category">CR1 Non-Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e48_cot" name="e48_roles" value="COT"><label for="e48_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e48_mentor" name="e48_roles" value="Mentor"><label for="e48_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e48_timing" name="e48_roles" value="Run Timing Computer"><label for="e48_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e48_shadow" name="e48_roles" value="Shadow"><label for="e48_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e48_notes">Notes</label><textarea id="e48_notes" name="e48_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 MDL Finale (3/13-15)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/13/2026</div>
+                            <div class="event-name">Team Dual Panel SL - U14 Ski Up</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e49_cot" name="e49_roles" value="COT"><label for="e49_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e49_mentor" name="e49_roles" value="Mentor"><label for="e49_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e49_timing" name="e49_roles" value="Run Timing Computer"><label for="e49_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e49_shadow" name="e49_roles" value="Shadow"><label for="e49_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e49_notes">Notes</label><textarea id="e49_notes" name="e49_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/14/2026</div>
+                            <div class="event-name">Scored Finale MDL x2 SL - U14 Ski Up</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e50_cot" name="e50_roles" value="COT"><label for="e50_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e50_mentor" name="e50_roles" value="Mentor"><label for="e50_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e50_timing" name="e50_roles" value="Run Timing Computer"><label for="e50_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e50_shadow" name="e50_roles" value="Shadow"><label for="e50_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e50_notes">Notes</label><textarea id="e50_notes" name="e50_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/15/2026</div>
+                            <div class="event-name">Scored Finale MDL x2 GS - U14 Ski Up</div>
+                            <span class="event-category">CR1 Scored</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e51_cot" name="e51_roles" value="COT"><label for="e51_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e51_mentor" name="e51_roles" value="Mentor"><label for="e51_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e51_timing" name="e51_roles" value="Run Timing Computer"><label for="e51_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e51_shadow" name="e51_roles" value="Shadow"><label for="e51_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e51_notes">Notes</label><textarea id="e51_notes" name="e51_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <h3 class="weekend-header">🎿 Lutsen Spring Series (3/19-24)</h3>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/19/2026</div>
+                            <div class="event-name">Lutsen Spring Series</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e52_cot" name="e52_roles" value="COT"><label for="e52_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e52_mentor" name="e52_roles" value="Mentor"><label for="e52_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e52_timing" name="e52_roles" value="Run Timing Computer"><label for="e52_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e52_shadow" name="e52_roles" value="Shadow"><label for="e52_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e52_notes">Notes</label><textarea id="e52_notes" name="e52_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/20/2026</div>
+                            <div class="event-name">Lutsen Spring Series</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e53_cot" name="e53_roles" value="COT"><label for="e53_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e53_mentor" name="e53_roles" value="Mentor"><label for="e53_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e53_timing" name="e53_roles" value="Run Timing Computer"><label for="e53_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e53_shadow" name="e53_roles" value="Shadow"><label for="e53_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e53_notes">Notes</label><textarea id="e53_notes" name="e53_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/21/2026</div>
+                            <div class="event-name">Lutsen Spring Series</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e54_cot" name="e54_roles" value="COT"><label for="e54_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e54_mentor" name="e54_roles" value="Mentor"><label for="e54_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e54_timing" name="e54_roles" value="Run Timing Computer"><label for="e54_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e54_shadow" name="e54_roles" value="Shadow"><label for="e54_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e54_notes">Notes</label><textarea id="e54_notes" name="e54_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/22/2026</div>
+                            <div class="event-name">Lutsen Spring Series</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e55_cot" name="e55_roles" value="COT"><label for="e55_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e55_mentor" name="e55_roles" value="Mentor"><label for="e55_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e55_timing" name="e55_roles" value="Run Timing Computer"><label for="e55_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e55_shadow" name="e55_roles" value="Shadow"><label for="e55_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e55_notes">Notes</label><textarea id="e55_notes" name="e55_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/23/2026</div>
+                            <div class="event-name">Lutsen Spring Series</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e56_cot" name="e56_roles" value="COT"><label for="e56_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e56_mentor" name="e56_roles" value="Mentor"><label for="e56_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e56_timing" name="e56_roles" value="Run Timing Computer"><label for="e56_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e56_shadow" name="e56_roles" value="Shadow"><label for="e56_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e56_notes">Notes</label><textarea id="e56_notes" name="e56_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-date">3/24/2026</div>
+                            <div class="event-name">Lutsen Spring Series</div>
+                            <span class="event-category">Centra/CR1 FIS</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item"><input type="checkbox" id="e57_cot" name="e57_roles" value="COT"><label for="e57_cot">COT</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e57_mentor" name="e57_roles" value="Mentor"><label for="e57_mentor">Mentor</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e57_timing" name="e57_roles" value="Run Timing Computer"><label for="e57_timing">Run Timing Computer</label></div>
+                            <div class="checkbox-item"><input type="checkbox" id="e57_shadow" name="e57_roles" value="Shadow"><label for="e57_shadow">Shadow</label></div>
+                        </div>
+                        <div class="form-group"><label for="e57_notes">Notes</label><textarea id="e57_notes" name="e57_notes" placeholder="Any additional information..."></textarea></div>
+                    </div>
+                </div>
+                <div class="submit-section">
+                    <button type="submit">Submit My Volunteer Interest</button>
+                </div>
+            </form>
+            <div class="loading" id="loadingMessage"><p>⏳ Submitting your responses...</p></div>
+        </div>
+    </div>
+    <script>
+        const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+        document.getElementById('volunteerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            document.getElementById('successMessage').classList.remove('active');
+            document.getElementById('errorMessage').classList.remove('active');
+            document.getElementById('loadingMessage').classList.add('active');
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            const formData = { timestamp: new Date().toISOString(), firstName: document.getElementById('firstName').value, lastName: document.getElementById('lastName').value, email: document.getElementById('email').value, phone: document.getElementById('phone').value, events: [] };
+            for (let i = 1; i <= 57; i++) {
+                const roles = [];
+                const checkboxes = document.querySelectorAll(`input[name="e${i}_roles"]:checked`);
+                checkboxes.forEach(cb => roles.push(cb.value));
+                const notes = document.getElementById(`e${i}_notes`)?.value || '';
+                if (roles.length > 0 || notes.trim() !== '') {
+                    formData.events.push({ eventNumber: i, roles: roles, notes: notes });
+                }
+            }
+            try {
+                await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData) });
+                document.getElementById('loadingMessage').classList.remove('active');
+                document.getElementById('successMessage').classList.add('active');
+                this.reset();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => { submitButton.disabled = false; }, 3000);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loadingMessage').classList.remove('active');
+                document.getElementById('errorMessage').classList.add('active');
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
